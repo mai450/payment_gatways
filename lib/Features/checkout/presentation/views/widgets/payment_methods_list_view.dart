@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:payment/Features/checkout/presentation/views/widgets/payment_method_item.dart';
 
 class PaymentMethodsListView extends StatefulWidget {
-  const PaymentMethodsListView({super.key});
-
+  const PaymentMethodsListView({super.key, this.index});
+  final Function(int)? index;
   @override
   State<PaymentMethodsListView> createState() => _PaymentMethodsListViewState();
 }
@@ -28,6 +28,7 @@ class _PaymentMethodsListViewState extends State<PaymentMethodsListView> {
               child: GestureDetector(
                 onTap: () {
                   activeIndex = index;
+                  widget.index!(activeIndex);
                   setState(() {});
                 },
                 child: PaymentMethodItem(

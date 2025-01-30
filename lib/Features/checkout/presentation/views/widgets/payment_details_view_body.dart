@@ -24,12 +24,12 @@ class _PaymentDetailsViewBodyState extends State<PaymentDetailsViewBody> {
         const SliverToBoxAdapter(
           child: PaymentMethodsListView(),
         ),
-        SliverToBoxAdapter(
-          child: CustomCreditCard(
-            autovalidateMode: autovalidateMode,
-            formKey: formKey,
-          ),
-        ),
+        // SliverToBoxAdapter(
+        //   child: CustomCreditCard(
+        //     autovalidateMode: autovalidateMode,
+        //     formKey: formKey,
+        //   ),
+        // ),
         SliverFillRemaining(
           hasScrollBody: false,
           child: Align(
@@ -37,7 +37,7 @@ class _PaymentDetailsViewBodyState extends State<PaymentDetailsViewBody> {
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 12, left: 16, right: 16),
                 child: CustomButton(
-                  onTap: () {
+                  onTap1: () {
                     if (formKey.currentState!.validate()) {
                       formKey.currentState!.save();
                       log('payment');
