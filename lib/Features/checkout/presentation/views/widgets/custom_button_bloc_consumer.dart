@@ -7,6 +7,7 @@ import 'package:payment/Features/checkout/data/models/list_items_model/item.dart
 import 'package:payment/Features/checkout/data/models/list_items_model/list_items_model.dart';
 import 'package:payment/Features/checkout/data/models/payment_initent_input_model.dart';
 import 'package:payment/Features/checkout/presentation/manger/payment_cubit/payment_cubit.dart';
+import 'package:payment/Features/checkout/presentation/views/my_cart_view.dart';
 import 'package:payment/Features/checkout/presentation/views/thank_you_view.dart';
 import 'package:payment/core/utils/api_keys.dart';
 import 'package:payment/core/widgets/custom_button.dart';
@@ -42,13 +43,7 @@ class CustomButtonBlocConsumer extends StatelessWidget {
             selectedButton: index,
             onTap2: (selectedButton) {
               if (selectedButton == 0) {
-                PaymentInitentInputModel paymentInitentInputModel =
-                    PaymentInitentInputModel(
-                        amount: '100',
-                        currency: 'USD',
-                        customerId: 'cus_RepmDZmxGb73xy');
-                BlocProvider.of<PaymentCubit>(context).makePayment(
-                    paymentInitentInputModel: paymentInitentInputModel);
+                executeStripePayment(context);
               } else {
                 var transactionData = getTransactionData();
                 executePaypalPayment(context, transactionData);
@@ -58,6 +53,14 @@ class CustomButtonBlocConsumer extends StatelessWidget {
             text: 'Continue');
       },
     );
+  }
+
+  void executeStripePayment(BuildContext context) {
+    PaymentInitentInputModel paymentInitentInputModel =
+        PaymentInitentInputModel(
+            amount: '100', currency: 'USD', customerId: 'cus_RepmDZmxGb73xy');
+    BlocProvider.of<PaymentCubit>(context)
+        .makePayment(paymentInitentInputModel: paymentInitentInputModel);
   }
 
   void executePaypalPayment(BuildContext context,
@@ -77,13 +80,23 @@ class CustomButtonBlocConsumer extends StatelessWidget {
         note: "Contact us for any questions on your order.",
         onSuccess: (Map params) async {
           print("onSuccess: $params");
+          Navigator.push(context, MaterialPageRoute(builder: (context) {
+            return const ThankYouView();
+          }));
         },
         onError: (error) {
           print("onError: $error");
-          Navigator.pop(context);
+
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) {
+              return const MyCartView();
+            }),
+          );
         },
         onCancel: () {
           print('cancelled:');
+          Navigator.pop(context);
         },
       ),
     ));
